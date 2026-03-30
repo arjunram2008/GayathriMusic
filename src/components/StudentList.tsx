@@ -12,9 +12,9 @@ type Props = {
 export default function StudentList({ students, onDelete, onEdit, onMarkPaid }: Props) {
   if (!students.length) {
     return (
-      <div className="mx-4 mt-8 rounded-3xl border border-amber-100 bg-amber-50/70 p-8 text-center shadow-sm">
+      <div className="mx-4 mt-8 rounded-3xl border border-brand-100 bg-brand-50/70 p-8 text-center shadow-sm">
         <div className="mb-3 text-4xl">🎵</div>
-        <h3 className="text-xl font-semibold text-emerald-800">No students yet</h3>
+        <h3 className="text-xl font-semibold text-brand-800">No students yet</h3>
         <p className="mt-2 text-sm text-slate-600">Tap the + button to add your first student and start tracking payments.</p>
       </div>
     );

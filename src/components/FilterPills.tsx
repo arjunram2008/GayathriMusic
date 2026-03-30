@@ -24,8 +24,8 @@ export default function FilterPills({ selected, onChange }: Props) {
             onClick={() => onChange(filter)}
             className={`whitespace-nowrap rounded-full px-4 py-2 text-sm font-semibold transition-all duration-300 ${
               active
-                ? 'bg-emerald-500 text-white shadow-md shadow-emerald-300/50'
-                : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-emerald-100'
+                ? 'bg-brand-500 text-white shadow-md shadow-brand-300/50'
+                : 'bg-white text-slate-700 ring-1 ring-slate-200 hover:bg-brand-100'
             }`}
           >
             {labels[filter]}

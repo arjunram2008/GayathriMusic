@@ -8,14 +8,16 @@ import StudentList from './components/StudentList';
 import AddStudentModal from './components/AddStudentModal';
 import PaymentModal from './components/PaymentModal';
 import MonthlySummary from './components/MonthlySummary';
+import AttendancePage from './components/AttendancePage';
 import { useLocalStorage } from './hooks/useLocalStorage';
-import { Student, Payment } from './types';
+import { Student, Payment, AttendanceRecord } from './types';
 import { getCurrentMonthKey, getMonthKeyFromDate, groupPaymentsByMonth } from './utils/paymentUtils';
 
 function App() {
   const [students, setStudents] = useLocalStorage<Student[]>('students', []);
   const [payments, setPayments] = useLocalStorage<Payment[]>('payments', []);
-  const [currentTab, setCurrentTab] = useState<'students' | 'summary'>('students');
+  const [attendance, setAttendance] = useLocalStorage<AttendanceRecord[]>('attendance', []);
+  const [currentTab, setCurrentTab] = useState<'students' | 'summary' | 'attendance'>('students');
   const [filter, setFilter] = useState<'all' | 'paid' | 'notPaid'>('all');
   const [sortOrderAsc, setSortOrderAsc] = useState(true);
 
@@ -50,9 +52,9 @@ function App() {
     .reduce((total, item) => total + item.amount, 0);
 
   const stats = [
-    { label: 'Unpaid', value: `${unpaidCount}`, color: 'bg-rose-500', icon: '🔴' },
-    { label: 'Paid', value: `${paidCount}`, color: 'bg-emerald-500', icon: '🟢' },
-    { label: 'Collected', value: `$${totalCollected.toFixed(2)}`, color: 'bg-emerald-600', icon: '💰' }
+    { label: 'Unpaid', value: `${unpaidCount}`, color: 'bg-red-400', icon: '🔴' },
+    { label: 'Paid', value: `${paidCount}`, color: 'bg-brand-500', icon: '🟢' },
+    { label: 'Collected', value: `$${totalCollected.toFixed(2)}`, color: 'bg-brand-600', icon: '💰' }
   ];
 
   const openAddModal = () => {
@@ -132,14 +134,14 @@ function App() {
   }));
 
   return (
-    <div className="min-h-screen bg-gradient-to-br from-cyan-50 via-slate-50 to-emerald-50 text-slate-900">
+    <div className="min-h-screen bg-gradient-to-br from-brand-50 via-brand-100 to-brand-200 text-slate-900">
       <Header
         currentMonth={currentMonth}
         selectedFilter={filter}
         onFilterChange={setFilter}
-        onOpenSummary={() => setCurrentTab(prev => (prev === 'students' ? 'summary' : 'students'))}
+        currentTab={currentTab}
+        onTabChange={setCurrentTab}
         onSort={() => setSortOrderAsc(prev => !prev)}
-        showSummary={currentTab === 'summary'}
       />
 
       <main className="pb-28">
@@ -156,7 +158,7 @@ function App() {
 
             <FilterPills selected={filter} onChange={setFilter} />
 
-            <div className="rounded-2xl border border-emerald-50 bg-white/70 p-3 shadow-sm">
+            <div className="rounded-2xl border border-brand-50 bg-white/70 p-3 shadow-sm">
               <StudentList
                 students={filteredStudents}
                 onDelete={handleDeleteStudent}
@@ -165,21 +167,29 @@ function App() {
               />
             </div>
           </div>
-        ) : (
+        ) : currentTab === 'summary' ? (
           <MonthlySummary
             groups={summaryGroups}
             onScreenBack={() => setCurrentTab('students')}
           />
+        ) : (
+          <AttendancePage
+            students={students}
+            attendance={attendance}
+            onUpdateAttendance={setAttendance}
+          />
         )}
       </main>
 
-      <button
-        type="button"
-        onClick={openAddModal}
-        className="fixed bottom-6 right-5 z-20 rounded-full bg-brand-500 p-4 text-2xl text-white shadow-xl transition hover:bg-brand-600"
-      >
-        +
-      </button>
+      {currentTab === 'students' && (
+        <button
+          type="button"
+          onClick={openAddModal}
+          className="fixed bottom-6 right-5 z-20 rounded-full bg-brand-500 p-4 text-2xl text-white shadow-xl transition hover:bg-brand-600"
+        >
+          +
+        </button>
+      )}
 
       <AddStudentModal
         isOpen={addModalOpen}

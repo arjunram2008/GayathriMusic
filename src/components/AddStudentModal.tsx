@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { PaymentMethod, Student } from '../types';
+import { PaymentMethod, Student, ClassType } from '../types';
 
 type Props = {
   isOpen: boolean;
@@ -9,21 +9,34 @@ type Props = {
 };
 
 const paymentMethods: PaymentMethod[] = ['Bank of America', 'PayPal'];
+const classTypes: ClassType[] = [
+  'Thursday - First Class',
+  'Thursday - Second Class',
+  'Friday - First Class',
+  'Friday - Second Class',
+  'Friday - Third Class'
+];
 
 export default function AddStudentModal({ isOpen, onClose, onSave, editStudent }: Props) {
   const [name, setName] = useState('');
+  const [parentName, setParentName] = useState('');
   const [phone, setPhone] = useState('');
   const [paymentMethod, setPaymentMethod] = useState<PaymentMethod>('Bank of America');
+  const [classType, setClassType] = useState<ClassType>('Thursday - First Class');
 
   useEffect(() => {
     if (editStudent) {
       setName(editStudent.name);
+      setParentName(editStudent.parentName ?? '');
       setPhone(editStudent.phone ?? '');
       setPaymentMethod(editStudent.paymentMethod);
+      setClassType(editStudent.classType ?? 'Thursday - First Class');
     } else {
       setName('');
+      setParentName('');
       setPhone('');
       setPaymentMethod('Bank of America');
+      setClassType('Thursday - First Class');
     }
   }, [editStudent, isOpen]);
 
@@ -35,8 +48,10 @@ export default function AddStudentModal({ isOpen, onClose, onSave, editStudent }
 
     onSave({
       name: name.trim(),
+      parentName: parentName.trim() || undefined,
       phone: phone.trim() || undefined,
-      paymentMethod
+      paymentMethod,
+      classType
     });
 
     onClose();
@@ -58,13 +73,23 @@ export default function AddStudentModal({ isOpen, onClose, onSave, editStudent }
 
         <div className="mt-4 space-y-4">
           <label className="block">
-            <span className="text-sm font-medium text-slate-700">Name *</span>
+            <span className="text-sm font-medium text-slate-700">Student Name *</span>
             <input
               value={name}
               onChange={e => setName(e.target.value)}
               className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
               placeholder="Student name"
               required
+            />
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-medium text-slate-700">Parent's Name</span>
+            <input
+              value={parentName}
+              onChange={e => setParentName(e.target.value)}
+              className="mt-1 w-full rounded-lg border border-slate-300 px-3 py-2 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+              placeholder="Parent or guardian name (optional)"
             />
           </label>
 
@@ -87,6 +112,19 @@ export default function AddStudentModal({ isOpen, onClose, onSave, editStudent }
             >
               {paymentMethods.map(method => (
                 <option key={method} value={method}>{method}</option>
+              ))}
+            </select>
+          </label>
+
+          <label className="block">
+            <span className="text-sm font-medium text-slate-700">Class Type</span>
+            <select
+              value={classType}
+              onChange={e => setClassType(e.target.value as ClassType)}
+              className="mt-1 w-full rounded-lg border border-slate-300 bg-white px-3 py-2 text-slate-700 outline-none focus:border-brand-400 focus:ring-2 focus:ring-brand-100"
+            >
+              {classTypes.map(type => (
+                <option key={type} value={type}>{type}</option>
               ))}
             </select>
           </label>
