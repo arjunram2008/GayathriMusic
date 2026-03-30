@@ -1,6 +1,6 @@
 export type PaymentMethod = 'Bank of America' | 'PayPal';
 
-export type ClassType = 'Thursday - First Class' | 'Thursday - Second Class' | 'Friday - First Class' | 'Friday - Second Class' | 'Friday - Third Class';
+export type ClassType = 'Thursday - First Class' | 'Thursday - Second Class' | 'Thursday - Third Class' | 'Friday - First Class' | 'Friday - Second Class' | 'Friday - Third Class';
 
 export type Student = {
   id: string;

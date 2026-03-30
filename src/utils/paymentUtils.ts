@@ -32,15 +32,13 @@ export const isAfterStartDate = (date: string): boolean => {
 export const groupPaymentsByMonth = (payments: Payment[]): MonthlyGroup[] => {
   const map = new Map<string, Payment[]>();
 
-  payments
-    .filter(payment => isAfterStartDate(payment.date))
-    .forEach(payment => {
-      const key = getMonthKeyFromDate(payment.date);
-      if (!map.has(key)) {
-        map.set(key, []);
-      }
-      map.get(key)!.push(payment);
-    });
+  payments.forEach(payment => {
+    const key = getMonthKeyFromDate(payment.date);
+    if (!map.has(key)) {
+      map.set(key, []);
+    }
+    map.get(key)!.push(payment);
+  });
 
   const result: MonthlyGroup[] = [];
 

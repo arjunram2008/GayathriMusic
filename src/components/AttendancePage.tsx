@@ -11,6 +11,7 @@ type Props = {
 const classTypes: ClassType[] = [
   'Thursday - First Class',
   'Thursday - Second Class',
+  'Thursday - Third Class',
   'Friday - First Class',
   'Friday - Second Class',
   'Friday - Third Class'
@@ -29,6 +30,7 @@ export default function AttendancePage({ students, attendance, onUpdateAttendanc
     const groups: Record<ClassType, Student[]> = {
       'Thursday - First Class': [],
       'Thursday - Second Class': [],
+      'Thursday - Third Class': [],
       'Friday - First Class': [],
       'Friday - Second Class': [],
       'Friday - Third Class': []

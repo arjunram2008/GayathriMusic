@@ -7,9 +7,10 @@ type Props = {
   onDelete: (id: string) => void;
   onEdit: (student: Student) => void;
   onMarkPaid: (student: Student) => void;
+  monthlyAmounts: Map<string, number>;
 };
 
-export default function StudentList({ students, onDelete, onEdit, onMarkPaid }: Props) {
+export default function StudentList({ students, onDelete, onEdit, onMarkPaid, monthlyAmounts }: Props) {
   if (!students.length) {
     return (
       <div className="mx-4 mt-8 rounded-3xl border border-brand-100 bg-brand-50/70 p-8 text-center shadow-sm">
@@ -23,7 +24,14 @@ export default function StudentList({ students, onDelete, onEdit, onMarkPaid }: 
   return (
     <div className="space-y-3 p-4">
       {students.map(student => (
-        <StudentCard key={student.id} student={student} onDelete={onDelete} onEdit={onEdit} onMarkPaid={onMarkPaid} />
+        <StudentCard
+          key={student.id}
+          student={student}
+          onDelete={onDelete}
+          onEdit={onEdit}
+          onMarkPaid={onMarkPaid}
+          monthlyAmount={monthlyAmounts.get(student.id) ?? 0}
+        />
       ))}
     </div>
   );

@@ -7,11 +7,11 @@ type Props = {
   onDelete: (id: string) => void;
   onEdit: (student: Student) => void;
   onMarkPaid: (student: Student) => void;
+  monthlyAmount: number;
 };
 
-export default function StudentCard({ student, onDelete, onEdit, onMarkPaid }: Props) {
-  const currentMonth = getCurrentMonthKey();
-  const paid = student.lastPaidMonth === currentMonth;
+export default function StudentCard({ student, onDelete, onEdit, onMarkPaid, monthlyAmount }: Props) {
+  const paid = monthlyAmount > 0;
 
   return (
     <article className={`rounded-2xl border p-4 shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-lg ${paid ? 'border-brand-100 bg-brand-50/80' : 'border-rose-100 bg-rose-50/80'}`}>
@@ -22,6 +22,10 @@ export default function StudentCard({ student, onDelete, onEdit, onMarkPaid }: P
             <p className="text-xs text-slate-500">Parent: {student.parentName}</p>
           )}
           <p className="mt-1 text-xs text-slate-600">{student.paymentMethod} • {student.phone ?? 'No phone'}</p>
+          <p className="mt-1 text-xs font-semibold text-slate-700">
+            Month payment: ${monthlyAmount.toFixed(2)}
+            {monthlyAmount > 0 ? ' (paid)' : ' (unpaid)'}
+          </p>
         </div>
         <span className={`rounded-full px-2 py-1 text-xs font-bold ${paid ? 'bg-brand-600 text-white' : 'bg-rose-500 text-white'}`}>
           {paid ? 'Paid' : 'Not Paid'}
